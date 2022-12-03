@@ -1,7 +1,8 @@
 from enum import Enum
 from .component import DISPLAY_PREFIX
+from typing import Union
 
-def check_DISPLAY_PREFIX(_cls: Enum|DISPLAY_PREFIX):
+def check_DISPLAY_PREFIX(_cls: Union[Enum,DISPLAY_PREFIX]):
     """check if prefix is a valid DISPLAY_PREFIX
 
     Args:

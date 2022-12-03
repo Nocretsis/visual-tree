@@ -17,7 +17,7 @@ class folder:
         return self.path.is_dir()
     
     
-folder_from = folder(pathlib.Path('visual_tree').absolute())
+folder_from = folder(pathlib.Path('.').absolute())
 tree = build_tree(folder_from,max_depth=2)
 tree()
 """ result:

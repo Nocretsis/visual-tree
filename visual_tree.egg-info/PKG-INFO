@@ -1,12 +1,10 @@
 Metadata-Version: 2.1
 Name: visual-tree
-Version: 0.0.1
+Version: 1.0.1
 Summary: visualize the tree structure of any recursable object in python
 Home-page: https://github.com/Nocretsis/visual-tree
 Author: Nocsis
 Author-email: cchj2638@gmail.com
-License: UNKNOWN
-Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Operating System :: OS Independent
@@ -25,7 +23,7 @@ this is a simple tool to visualize the tree structure of any recursable object i
 ## Installation
 
 ```bash
-pip install visual_tree
+pip install visual-tree
 ```
 
 ## Usage
@@ -67,5 +65,3 @@ or
 ## License
 
 Apache License 2.0 (see [LICENSE](./LICENSE) file)
-
-

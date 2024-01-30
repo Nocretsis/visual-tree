@@ -14,12 +14,12 @@
 
 import setuptools
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name = "visual-tree",
-    version = "0.0.1",
+    version = "1.0.1",
     author = "Nocsis",
     author_email = "cchj2638@gmail.com",
     description = "visualize the tree structure of any recursable object in python",

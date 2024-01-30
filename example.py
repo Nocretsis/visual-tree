@@ -1,39 +1,41 @@
-from __content.build_tree import visual_tree as build_tree
+from pathlib import Path
+from visual_tree.VisualTree import VisualTree
 
-import pathlib
+tree = VisualTree(
+    root=Path('.'),
+    root_validator=Path.is_dir,
+    root_extend_func=Path.iterdir,
+    naming_child=lambda x: x.name)
 
-
-# example as folder explorer#
-
-class folder:
-    def __init__(self, path: pathlib.Path):
-        self.path = path
-    def __iter__(self): # extend source
-        for i in self.path.iterdir():
-            yield folder(i)
-    def __str__(self): # content format
-        return str(self.path.name)
-    def __bool__(self): # validate source
-        return self.path.is_dir()
-    
-    
-folder_from = folder(pathlib.Path('.').absolute())
-tree = build_tree(folder_from,max_depth=2)
-tree()
+tree.report()
 """ result:
-visual_tree
-├──*sample.py
-├──*__content
-│  ├──*build_tree.py
-│  ├──*component.py
-│  └──*__pycache__
-│     └──*...
-└──*__init__.py
+.
+├──── build
+│     └──── bdist.win-amd64
+├──── dist
+│     ├──── visual-tree-0.0.2.tar.gz
+│     └──── visual_tree-0.0.2-py3-none-any.whl
+├──── example.py
+├──── LICENSE
+├──── README.md
+├──── setup.py
+├──── VisualTree.py
+├──── visual_tree
+├──── visual_tree.egg-info
+│     ├──── dependency_links.txt
+│     ├──── PKG-INFO
+│     ├──── SOURCES.txt
+│     └──── top_level.txt
+├──── __init__.py
+└──── __pycache__
+      └──── VisualTree.cpython-310.pyc
 """
 ######################
 
 
 # example as data structure#
+from typing import Iterable
+
 data = {
     'a': [1,2,3],
     'b': { 'c': 1, 'd': 2, 'e': 3 },
@@ -43,7 +45,6 @@ data = {
     'i': None,
     'j': True}
 
-from typing import Iterable
 # interface between data structure and visual_tree
 class interface: 
     def __init__(self, _data, _name = None):
@@ -54,6 +55,7 @@ class interface:
         if isinstance(self.data, dict):
             for k,v in self.data.items():
                 yield interface(v, k)
+                
         elif isinstance(data,Iterable):
             for value in self.data:
                 yield interface(value)
@@ -70,27 +72,27 @@ class interface:
             return f'{self.name} : {self.data}'
 
 
-tree = build_tree(interface(data, 'data'),
+tree = VisualTree(interface(data, 'data'),
                   # validate source if we not set __bool__ method in interface class
-                  valid=lambda x: isinstance(x.data,Iterable) and not isinstance(x.data,str)
+                  root_validator=lambda x: isinstance(x.data,Iterable) and not isinstance(x.data,str)
                   )
-tree()
+tree.report()
 """result:
 data
-├──*a
-│  ├──*1
-│  ├──*2
-│  └──*3
-├──*b
-│  ├──*c : 1
-│  ├──*d : 2
-│  └──*e : 3
-├──*f : hello world
-├──*g
-│  ├──*1
-│  ├──*2
-│  └──*3
-├──*h : 1
-├──*i : None
-└──*j : True
+├──── a
+│     ├──── 1
+│     ├──── 2
+│     └──── 3
+├──── b
+│     ├──── c : 1
+│     ├──── d : 2
+│     └──── e : 3
+├──── f : hello world
+├──── g
+│     ├──── 1
+│     ├──── 2
+│     └──── 3
+├──── h : 1
+├──── i : None
+└──── j : True
 """

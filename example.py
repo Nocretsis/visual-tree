@@ -2,33 +2,35 @@ from pathlib import Path
 from visual_tree.VisualTree import VisualTree
 
 tree = VisualTree(
-    root=Path('.'),
+    root=Path('.').absolute(),
     root_validator=Path.is_dir,
     root_extend_func=Path.iterdir,
     naming_child=lambda x: x.name)
 
 tree.report()
 """ result:
-.
+visual_tree
+├──── .gitignore
 ├──── build
-│     └──── bdist.win-amd64
-├──── dist
-│     ├──── visual-tree-0.0.2.tar.gz
-│     └──── visual_tree-0.0.2-py3-none-any.whl
+│     ├──── bdist.win-amd64
+│     └──── lib
+│           └──── visual_tree
+│                 ├──── VisualTree.py
+│                 └──── __init__.py
 ├──── example.py
 ├──── LICENSE
 ├──── README.md
-├──── setup.py
-├──── VisualTree.py
 ├──── visual_tree
-├──── visual_tree.egg-info
-│     ├──── dependency_links.txt
-│     ├──── PKG-INFO
-│     ├──── SOURCES.txt
-│     └──── top_level.txt
-├──── __init__.py
-└──── __pycache__
-      └──── VisualTree.cpython-310.pyc
+│     ├──── VisualTree.py
+│     ├──── __init__.py
+│     └──── __pycache__
+│           ├──── VisualTree.cpython-310.pyc
+│           └──── __init__.cpython-310.pyc
+└──── visual_tree.egg-info
+      ├──── dependency_links.txt
+      ├──── PKG-INFO
+      ├──── SOURCES.txt
+      └──── top_level.txt
 """
 ######################
 
@@ -65,34 +67,42 @@ class interface:
     
     def __str__(self) -> str: # content format
         if self.name is None:
-            return str(self.data)
+            return repr(self.data)
         if isinstance(self.data,Iterable) and not isinstance(self.data,str):
-             return str(self.name)
+             return repr(self.name)
         else:
-            return f'{self.name} : {self.data}'
+            return f'{repr(self.name)} : {repr(self.data)}'
+        
+    def __bool__(self): # validate source
+        return isinstance(self.data,Iterable) and not isinstance(self.data,str)
 
 
 tree = VisualTree(interface(data, 'data'),
-                  # validate source if we not set __bool__ method in interface class
-                  root_validator=lambda x: isinstance(x.data,Iterable) and not isinstance(x.data,str)
+                  # extend source if we set __iter__ method in interface class
+                  # root_extend_func=...
+                  
+                  # content format if we set __str__ method in interface class
+                  # naming=...
+            
+                  root_validator=interface.__bool__,
                   )
 tree.report()
 """result:
-data
-├──── a
+'data'
+├──── 'a'
 │     ├──── 1
 │     ├──── 2
 │     └──── 3
-├──── b
-│     ├──── c : 1
-│     ├──── d : 2
-│     └──── e : 3
-├──── f : hello world
-├──── g
+├──── 'b'
+│     ├──── 'c' : 1
+│     ├──── 'd' : 2
+│     └──── 'e' : 3
+├──── 'f' : 'hello world'
+├──── 'g'
 │     ├──── 1
 │     ├──── 2
 │     └──── 3
-├──── h : 1
-├──── i : None
-└──── j : True
+├──── 'h' : 1
+├──── 'i' : None
+└──── 'j' : True
 """

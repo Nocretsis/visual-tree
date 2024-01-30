@@ -19,18 +19,13 @@ visual_tree
 │                 └──── __init__.py
 ├──── example.py
 ├──── LICENSE
-├──── README.md
 ├──── visual_tree
 │     ├──── VisualTree.py
 │     ├──── __init__.py
 │     └──── __pycache__
 │           ├──── VisualTree.cpython-310.pyc
 │           └──── __init__.cpython-310.pyc
-└──── visual_tree.egg-info
-      ├──── dependency_links.txt
-      ├──── PKG-INFO
-      ├──── SOURCES.txt
-      └──── top_level.txt
+└──── README.md
 """
 ######################
 
